@@ -46,8 +46,8 @@ public class Object
         
         UpdateBuffers();
         
-        GL.DrawElements(PrimitiveType.Points, _vertices.Length, DrawElementsType.UnsignedInt, 0); 
-        GL.DrawElements(PrimitiveType.LineStrip, _vertices.Length, DrawElementsType.UnsignedInt, 0);
+        GL.DrawElements(PrimitiveType.Points, _indices.Length, DrawElementsType.UnsignedInt, 0); 
+        GL.DrawElements(PrimitiveType.LineStrip, _indices.Length, DrawElementsType.UnsignedInt, 0);
     }
 
     public void UpdateVertices(float x, float y)
