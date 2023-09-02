@@ -33,17 +33,12 @@ public class Window : GameWindow
 
     private int _currentObject;
     
-    
-    
-    
-    private Layers _layers;
+    private bool _canEdit = true;
 
     protected override void OnLoad()
     {
         base.OnLoad();
 
-        _layers = new Layers();
-        
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         
         _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
@@ -56,10 +51,12 @@ public class Window : GameWindow
     protected override void OnRenderFrame(FrameEventArgs e)
     {
         base.OnRenderFrame(e);
-        
+
         _controller.Update(this, (float)e.Time);
         
         GL.Clear(ClearBufferMask.ColorBufferBit);
+        
+        ImGui.ShowDemoWindow();
 
         _controller.Render();
         ImGuiController.CheckGLError("End of frame");
@@ -81,23 +78,40 @@ public class Window : GameWindow
             return;
         }
 
+        var input = KeyboardState;
+
+        if (input.IsKeyDown(Keys.E))
+        {
+            _canEdit = true;
+        }
+
+        if (input.IsKeyDown(Keys.R))
+        {
+            _canEdit = false;
+        }
+
         var mouse = MouseState;
 
         // create line strip
         if (mouse.IsButtonPressed(MouseButton.Left))
         {
-            var x = (2.0f * mouse.X) / ClientSize.X - 1.0f;
-            var y = 1.0f - (2.0f * mouse.Y) / ClientSize.Y;
-            _objects[_currentObject].UpdateVertices(x, y);
+            if (_canEdit)
+            {
+                var x = (2.0f * mouse.X) / ClientSize.X - 1.0f;
+                var y = 1.0f - (2.0f * mouse.Y) / ClientSize.Y;
+                _objects[_currentObject].UpdateVertices(x, y);
+            }
         }
 
         // create new layer
-        //if (mouse.IsButtonPressed(MouseButton.Right))
-        //{
-        //    _layers.CreateNewLayer();
-        //    CreateNewObject();
-        //    UpdateBuffers();
-        //}
+        if (mouse.IsButtonPressed(MouseButton.Right))
+        {
+            if (_canEdit)
+            {
+                _currentObject++;
+                _objects.Add(new Object());
+            }
+        }
     }
 
     protected override void OnResize(ResizeEventArgs e)
@@ -107,5 +121,10 @@ public class Window : GameWindow
         GL.Viewport(0, 0, e.Width, e.Height);
         
         _controller.WindowResized(ClientSize.X, ClientSize.Y);
+    }
+
+    public void ChangeObject(int id)
+    {
+        _currentObject = id;
     }
 }

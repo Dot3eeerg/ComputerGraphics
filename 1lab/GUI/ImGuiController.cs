@@ -48,16 +48,6 @@ public class ImGuiController : IDisposable
         _windowWidth = width;
         _windowHeight = height;
 
-        int major = GL.GetInteger(GetPName.MajorVersion);
-        int minor = GL.GetInteger(GetPName.MinorVersion);
-
-        GLVersion = major * 100 + minor * 10;
-
-        KHRDebugAvailable = (major == 4 && minor >= 3) || IsExtensionSupported("KHR_debug");
-
-        CompatibilityProfile =
-            (GL.GetInteger((GetPName)All.ContextProfileMask) & (int)All.ContextCompatibilityProfileBit) != 0;
-
         IntPtr context = ImGui.CreateContext();
         ImGui.SetCurrentContext(context);
         var io = ImGui.GetIO();
