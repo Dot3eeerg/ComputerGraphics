@@ -6,22 +6,22 @@ public class ElementBufferObject
 {
     private int _handle;
 
-    public ElementBufferObject(List<uint> indices)
+    public ElementBufferObject(uint[] indices)
     {
         _handle = GL.GenBuffer();
         Bind();
         Update(indices);
     }
 
-    public void Bind()
+    private void Bind()
     {
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, _handle);
     }
 
-    public void Update(List<uint> indices)
+    public void Update(uint[] indices)
     {
-        GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Count * sizeof(uint), indices.ToArray(),
-            BufferUsageHint.DynamicDraw);
+        GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices.ToArray(),
+            BufferUsageHint.StaticDraw);
     }
 
     public void Dispose()

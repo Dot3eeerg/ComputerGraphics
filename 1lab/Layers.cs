@@ -27,9 +27,22 @@ public class Layers
 
     public List<float> GetVertices()
         => Vertices[CurrentLayer];
+
+    public List<float> GetVertices(int i)
+        => Vertices[i];
     
     public List<uint> GetIndices()
         => Indices[CurrentLayer];
+    
+    public List<uint> GetIndices(int i)
+        => Indices[i];
+
+    public void CreateNewLayer()
+    {
+        Vertices.Add(new List<float>());
+        Indices.Add(new List<uint>());
+        CurrentLayer = Vertices.Count - 1;
+    }
 
     public void ChangeLayer(int layerID)
     {

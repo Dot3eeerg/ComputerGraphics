@@ -10,7 +10,7 @@ public class VertexArrayObject
     {
         _handle = GL.GenVertexArray();
         Bind();
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+        Update();
         GL.EnableVertexAttribArray(0);
     }
 
