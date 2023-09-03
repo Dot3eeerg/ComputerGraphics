@@ -35,6 +35,8 @@ public class Window : GameWindow
     
     private bool _canEdit = true;
 
+    private GUI.GUI _gui;
+
     protected override void OnLoad()
     {
         base.OnLoad();
@@ -46,6 +48,7 @@ public class Window : GameWindow
         _objects = new List<Object>();
         _objects.Add(new Object());
         _currentObject = 0;
+        _gui = new GUI.GUI(_controller);
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
@@ -56,15 +59,18 @@ public class Window : GameWindow
         
         GL.Clear(ClearBufferMask.ColorBufferBit);
         
-        ImGui.ShowDemoWindow();
-
-        _controller.Render();
-        ImGuiController.CheckGLError("End of frame");
+        //ImGui.ShowDemoWindow();
 
         foreach (var kek in _objects)
         {
             kek.Render();
         }
+        
+        _gui.DrawGui(_objects);
+        
+        _controller.Render();
+        
+        ImGuiController.CheckGLError("End of frame");
         
         SwapBuffers();
     }
@@ -121,6 +127,11 @@ public class Window : GameWindow
         GL.Viewport(0, 0, e.Width, e.Height);
         
         _controller.WindowResized(ClientSize.X, ClientSize.Y);
+    }
+
+    protected void OnDrawGUI()
+    {
+        
     }
 
     public void ChangeObject(int id)

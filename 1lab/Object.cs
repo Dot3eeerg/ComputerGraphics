@@ -95,4 +95,21 @@ public class Object
         _vaoPoints.Bind();
         _eboPoints.Update(_indices);
     }
+
+    public void UpdateColor(Vector3 color)
+    {
+        _color = new Vector4(color, 1.0f);
+    }
+
+    public void UpdateVertices(int i, float x, float y)
+    {
+        _vertices[i] = x;
+        _vertices[i + 1] = y;
+    }
+
+    public float[] GetVertices()
+        => _vertices;
+
+    public Vector3 GetColor()
+        => _color.Xyz;
 }
