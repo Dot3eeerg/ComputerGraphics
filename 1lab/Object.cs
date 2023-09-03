@@ -57,15 +57,14 @@ public class Object
             _color = new Vector4();
         }
 
-    public void Render()
+    public void Render(float pointSize)
     {
-        GL.PointSize(10.0f);
+        GL.PointSize(pointSize);
         GL.LineWidth(2.0f);
         
         _shader.Use();
 
         int vertexColorLocation = GL.GetUniformLocation(_shader.Handle, "Color");
-        //GL.Uniform4(vertexColorLocation, 1.0f, 0.5f, 0.8f, 1.0f);
         GL.Uniform4(vertexColorLocation, _color);
         
         UpdateBuffers();
@@ -101,7 +100,7 @@ public class Object
         _color = new Vector4(color, 1.0f);
     }
 
-    public void UpdateVertices(int i, float x, float y)
+    public void UpdateVerticesCoordinates(int i, float x, float y)
     {
         _vertices[i] = x;
         _vertices[i + 1] = y;

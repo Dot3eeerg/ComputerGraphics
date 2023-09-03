@@ -33,7 +33,7 @@ public class Window : GameWindow
 
     private int _currentObject;
     
-    private bool _canEdit = true;
+    private bool _canEdit = false;
 
     private GUI.GUI _gui;
 
@@ -48,7 +48,7 @@ public class Window : GameWindow
         _objects = new List<Object>();
         _objects.Add(new Object());
         _currentObject = 0;
-        _gui = new GUI.GUI(_controller);
+        _gui = new GUI.GUI(_controller, this);
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
@@ -59,14 +59,14 @@ public class Window : GameWindow
         
         GL.Clear(ClearBufferMask.ColorBufferBit);
         
-        //ImGui.ShowDemoWindow();
 
         foreach (var kek in _objects)
         {
-            kek.Render();
+            kek.Render(_objects.IndexOf(kek) == _currentObject ? 12.0f : 7.0f);
         }
         
-        _gui.DrawGui(_objects);
+        //ImGui.ShowDemoWindow();
+        _gui.DrawGui(_objects, _currentObject);
         
         _controller.Render();
         
@@ -85,6 +85,11 @@ public class Window : GameWindow
         }
 
         var input = KeyboardState;
+
+        if (input.IsKeyDown(Keys.Escape))
+        {
+            Close();
+        }
 
         if (input.IsKeyDown(Keys.E))
         {
@@ -127,11 +132,6 @@ public class Window : GameWindow
         GL.Viewport(0, 0, e.Width, e.Height);
         
         _controller.WindowResized(ClientSize.X, ClientSize.Y);
-    }
-
-    protected void OnDrawGUI()
-    {
-        
     }
 
     public void ChangeObject(int id)
