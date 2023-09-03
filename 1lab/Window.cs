@@ -137,5 +137,19 @@ public class Window : GameWindow
     public void ChangeObject(int id)
     {
         _currentObject = id;
+        _objects[_currentObject].OnChangeObject();
+    }
+
+    public void DeleteObject(int id)
+    {
+        _objects[id].Dispose();
+        _objects.RemoveAt(id);
+
+        if (_objects.Count == 0)
+        {
+            _objects.Add(new Object());
+        }
+
+        _currentObject = _objects.Count - 1;
     }
 }

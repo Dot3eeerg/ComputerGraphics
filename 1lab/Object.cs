@@ -84,6 +84,17 @@ public class Object
         _indices[^1] = (uint) _indices.Length - 1;
     }
 
+    public void OnChangeObject()
+    {
+        _vbo = new VertexBufferObject(_vertices);
+        _vao = new VertexArrayObject();
+        _ebo = new ElementBufferObject(_indices);
+        
+        _vboPoints = new VertexBufferObject(_vertices);
+        _vaoPoints = new VertexArrayObject();
+        _eboPoints = new ElementBufferObject(_indices);
+    }
+
     private void UpdateBuffers()
     {
         _vbo.Update(_vertices);
@@ -111,4 +122,22 @@ public class Object
 
     public Vector3 GetColor()
         => _color.Xyz;
+
+    public void Dispose()
+    {
+        _vao.Dispose();
+        _vbo.Dispose();
+        _ebo.Dispose();
+        
+        _vaoPoints.Dispose();
+        _vboPoints.Dispose();
+        _eboPoints.Dispose();
+
+        _vertices = new float[0];
+        _indices = new uint[0];
+        
+        _shader.Dispose();
+        
+        GC.SuppressFinalize(this);
+    }
 }

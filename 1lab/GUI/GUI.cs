@@ -29,6 +29,34 @@ public class GUI
 
     public void DrawGui(List<Object> objects, int currentObject)
     {
+        if (ImGui.BeginMainMenuBar())
+        {
+            if (ImGui.BeginMenu("Help"))
+            {
+                if (ImGui.MenuItem("Keybindings", "F1"))
+                {
+                    if (ImGui.TreeNode("Mouse buttons"))
+                    {
+                        ImGui.Text("Left mouse button - create primitive in current object");
+                        ImGui.Text("Right mouse button - create new object");
+                        
+                        ImGui.TreePop();
+                    }
+
+                    if (ImGui.TreeNode("Keyboard buttons"))
+                    {
+                        ImGui.Text("E - change to edit mode");
+                        ImGui.Text("R - change to view mode (set by default)");
+                    }
+                }
+                    
+                
+                ImGui.EndMenu();
+            }
+            
+            ImGui.EndMainMenuBar();
+        }
+        
         ImGui.SetNextWindowBgAlpha(0.5f);
         
         if (ImGui.Begin("Kek"))
@@ -66,11 +94,10 @@ public class GUI
            color.Y = kek.Y;
            color.Z = kek.Z;
            objects[currentObject].UpdateColor(color);
-           
+
            ImGui.Text("Position");
            float[] vertices = objects[currentObject].GetVertices();
 
-           ImGui.PushID("Coords");
            for (int i = 0; i < vertices.Length; i += 3)
            {
                System.Numerics.Vector2
@@ -79,55 +106,14 @@ public class GUI
                ImGui.DragFloat2((i / 3).ToString(), ref vert, 0.005f);
                objects[currentObject].UpdateVerticesCoordinates(i, vert.X, vert.Y);
            }
-           ImGui.PopID();
+
+           bool deleteObject = ImGui.Button("Delete object");
+           if (deleteObject)
+           {
+               _window.DeleteObject(currentObject);
+           }
             
            ImGui.End();
         }
-        
-        //if (ImGui.Begin("Variety"))
-        //{
-        //    if (ImGui.TreeNode("Objects"))
-        //    {
-        //        foreach (var obj in objects)
-        //        {
-        //            ImGui.PushID(objects.IndexOf(obj));
-        //            
-        //            if (ImGui.TreeNode(objects.IndexOf(obj).ToString()))
-        //            {
-        //                ImGui.Text("Color");
-        //                Vector3 color = obj.GetColor();
-        //                System.Numerics.Vector3 kek = new System.Numerics.Vector3(color.X, color.Y, color.Z);
-
-        //                ImGui.ColorEdit3("color", ref kek);
-        //                color.X = kek.X;
-        //                color.Y = kek.Y;
-        //                color.Z = kek.Z;
-        //                obj.UpdateColor(color);
-        //                
-        //                ImGui.Text("Position");
-        //                float[] vertices = obj.GetVertices();
-        //                ImGui.PushID("Coords");
-        //                for (int i = 0; i < vertices.Length; i += 3)
-        //                {
-        //                    System.Numerics.Vector2
-        //                        vert = new System.Numerics.Vector2(vertices[i], vertices[i + 1]);
-
-        //                    ImGui.DragFloat2((i / 3).ToString(), ref vert, 0.005f);
-        //                    obj.UpdateVerticesCoordinates(i, vert.X, vert.Y);
-        //                }
-        //                
-        //                ImGui.PopID();
-
-        //                ImGui.TreePop();
-        //            }
-        //            
-        //            ImGui.PopID();
-        //        }
-        //        
-        //        ImGui.TreePop();
-        //    }
-        //    
-        //    ImGui.End();
-        //}
     }
 }
