@@ -12,8 +12,14 @@ public class VertexBufferObject : IDisposable
         Bind();
         Update(vertices);
     }
+    
+    public void Handle()
+    {
+        Dispose();
+        _handle = GL.GenBuffer();
+    }
 
-    private void Bind()
+    public void Bind()
     {
         GL.BindBuffer(BufferTarget.ArrayBuffer, _handle);
     }

@@ -12,8 +12,14 @@ public class ElementBufferObject
         Bind();
         Update(indices);
     }
+    
+    public void Handle()
+    {
+        Dispose();
+        _handle = GL.GenBuffer();
+    }
 
-    private void Bind()
+    public void Bind()
     {
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, _handle);
     }

@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace _1lab.GUI;
 
 using ImGuiNET;
@@ -49,7 +47,6 @@ public class GUI
                         ImGui.Text("R - change to view mode (set by default)");
                     }
                 }
-                    
                 
                 ImGui.EndMenu();
             }
@@ -58,6 +55,52 @@ public class GUI
         }
         
         ImGui.SetNextWindowBgAlpha(0.5f);
+
+        //if (ImGui.Begin("Objects"))
+        //{
+        //    if (ImGui.TreeNode("Object"))
+        //    {
+        //        foreach (var obj in objects)
+        //        {
+        //            ImGui.PushID(objects.IndexOf(obj));
+        //            if (ImGui.TreeNode(objects.IndexOf(obj).ToString()))
+        //            {
+        //                Vector3 color = obj.GetColor();
+        //                System.Numerics.Vector3 kek = new System.Numerics.Vector3(color.X, color.Y, color.Z);
+
+        //                ImGui.ColorEdit3("color", ref kek);
+        //                color.X = kek.X;
+        //                color.Y = kek.Y;
+        //                color.Z = kek.Z;
+        //                obj.UpdateColor(color);
+        //                
+        //                ImGui.Text("Position");
+        //                float[] vertices = obj.GetVertices();
+
+        //                for (int i = 0; i < vertices.Length; i += 3)
+        //                {
+        //                    System.Numerics.Vector2
+        //                        vert = new System.Numerics.Vector2(vertices[i], vertices[i + 1]);
+
+        //                    ImGui.DragFloat2((i / 3).ToString(), ref vert, 0.005f);
+        //                    obj.UpdateVerticesCoordinates(i, vert.X, vert.Y);
+        //                }
+
+        //                bool deleteObject = ImGui.Button("Delete object");
+        //                if (deleteObject)
+        //                {
+        //                    _window.DeleteObject(objects.IndexOf(obj));
+        //                    break;
+        //                }
+        //            }
+        //            
+        //            ImGui.PopID();
+        //        }
+        //        
+        //        ImGui.TreePop();
+        //    }
+        //}
+        
         
         if (ImGui.Begin("Kek"))
         {
@@ -70,7 +113,12 @@ public class GUI
                     if (ImGui.Selectable(i.ToString(), isSelected))
                     {
                         currentObject = i;
-                        _window.ChangeObject(currentObject);
+                        _window.ChangeObject(true, currentObject);
+                    }
+
+                    if (isSelected)
+                    {
+                        ImGui.SetItemDefaultFocus();
                     }
                 }
                 
@@ -79,24 +127,28 @@ public class GUI
             
             ImGui.End();
         }
-
         
+        ObjectProperties(currentObject, objects[currentObject]);
+    }
+
+    private void ObjectProperties(int id, Object objects)
+    {
         ImGui.SetNextWindowBgAlpha(0.5f);
+        
         if (ImGui.Begin("Object properties"))
         {
-            
            ImGui.Text("Color");
-           Vector3 color = objects[currentObject].GetColor();
+           Vector3 color = objects.GetColor();
            System.Numerics.Vector3 kek = new System.Numerics.Vector3(color.X, color.Y, color.Z);
 
            ImGui.ColorEdit3("color", ref kek);
            color.X = kek.X;
            color.Y = kek.Y;
            color.Z = kek.Z;
-           objects[currentObject].UpdateColor(color);
+           objects.UpdateColor(color);
 
            ImGui.Text("Position");
-           float[] vertices = objects[currentObject].GetVertices();
+           float[] vertices = objects.GetVertices();
 
            for (int i = 0; i < vertices.Length; i += 3)
            {
@@ -104,16 +156,14 @@ public class GUI
                    vert = new System.Numerics.Vector2(vertices[i], vertices[i + 1]);
 
                ImGui.DragFloat2((i / 3).ToString(), ref vert, 0.005f);
-               objects[currentObject].UpdateVerticesCoordinates(i, vert.X, vert.Y);
+               objects.UpdateVerticesCoordinates(i, vert.X, vert.Y);
            }
 
            bool deleteObject = ImGui.Button("Delete object");
            if (deleteObject)
            {
-               _window.DeleteObject(currentObject);
+               _window.DeleteObject(id);
            }
-            
-           ImGui.End();
         }
     }
 }

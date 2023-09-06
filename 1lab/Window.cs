@@ -34,6 +34,7 @@ public class Window : GameWindow
     private int _currentObject;
     
     private bool _canEdit = false;
+    public bool _canChange = false;
 
     private GUI.GUI _gui;
 
@@ -54,19 +55,21 @@ public class Window : GameWindow
     protected override void OnRenderFrame(FrameEventArgs e)
     {
         base.OnRenderFrame(e);
+        
+        ChangeObject();
 
         _controller.Update(this, (float)e.Time);
         
         GL.Clear(ClearBufferMask.ColorBufferBit);
         
-
         foreach (var kek in _objects)
         {
+            kek.UpdateBuffers();
             kek.Render(_objects.IndexOf(kek) == _currentObject ? 12.0f : 7.0f);
         }
         
-        //ImGui.ShowDemoWindow();
         _gui.DrawGui(_objects, _currentObject);
+        //ImGui.ShowDemoWindow();
         
         _controller.Render();
         
@@ -91,11 +94,13 @@ public class Window : GameWindow
             Close();
         }
 
+        // edit mode
         if (input.IsKeyDown(Keys.E))
         {
             _canEdit = true;
         }
 
+        // view mode
         if (input.IsKeyDown(Keys.R))
         {
             _canEdit = false;
@@ -119,7 +124,7 @@ public class Window : GameWindow
         {
             if (_canEdit)
             {
-                _currentObject++;
+                _currentObject = _objects.Count;
                 _objects.Add(new Object());
             }
         }
@@ -134,10 +139,19 @@ public class Window : GameWindow
         _controller.WindowResized(ClientSize.X, ClientSize.Y);
     }
 
-    public void ChangeObject(int id)
+    public void ChangeObject()
     {
+        if (_canChange)
+        {
+            _objects[_currentObject].OnChangeObject();
+            _canChange = false;
+        }
+    }
+
+    public void ChangeObject(bool flag, int id)
+    {
+        _canChange = flag;
         _currentObject = id;
-        _objects[_currentObject].OnChangeObject();
     }
 
     public void DeleteObject(int id)

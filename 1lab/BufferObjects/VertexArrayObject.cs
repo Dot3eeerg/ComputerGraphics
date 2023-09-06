@@ -14,6 +14,12 @@ public class VertexArrayObject
         GL.EnableVertexAttribArray(0);
     }
 
+    public void Handle()
+    {
+        Dispose();
+        _handle = GL.GenVertexArray();
+    }
+
     public void Bind()
     {
         GL.BindVertexArray(_handle);

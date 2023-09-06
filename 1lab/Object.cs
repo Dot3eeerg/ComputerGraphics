@@ -86,16 +86,20 @@ public class Object
 
     public void OnChangeObject()
     {
-        _vbo = new VertexBufferObject(_vertices);
-        _vao = new VertexArrayObject();
-        _ebo = new ElementBufferObject(_indices);
+        _vao.Bind();
         
-        _vboPoints = new VertexBufferObject(_vertices);
-        _vaoPoints = new VertexArrayObject();
-        _eboPoints = new ElementBufferObject(_indices);
+        _vaoPoints.Bind();
+        
+        _vbo.Update(_vertices);
+        _vao.Update();
+        _ebo.Update(_indices);
+        
+        _vboPoints.Update(_vertices);
+        _vaoPoints.Update();
+        _eboPoints.Update(_indices);
     }
 
-    private void UpdateBuffers()
+    public void UpdateBuffers()
     {
         _vbo.Update(_vertices);
         _vao.Bind();
