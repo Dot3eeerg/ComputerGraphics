@@ -57,7 +57,7 @@ public class Object
         
         _shader.SetVector3("light.position", lightPos);
         _shader.SetVector3("light.ambient",  new Vector3(0.2f, 0.2f, 0.2f));
-        _shader.SetVector3("light.diffuse",  new Vector3(0.7f, 0.7f, 0.7f)); // darken the light a bit to fit the scene
+        _shader.SetVector3("light.diffuse",  new Vector3(0.7f, 0.7f, 0.7f));
         _shader.SetVector3("light.specular", new Vector3(1.0f, 1.0f, 1.0f));
         
         GL.DrawArrays(PrimitiveType.Triangles, 0, 36);

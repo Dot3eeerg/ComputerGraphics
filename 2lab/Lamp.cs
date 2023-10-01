@@ -4,10 +4,6 @@ using Shaders;
 using BufferObjects;
 
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using System.Diagnostics;
 using OpenTK.Graphics.OpenGL4;
 
 public class Lamp
@@ -42,7 +38,7 @@ public class Lamp
         _shader.Use();
 
         Matrix4 lampMatrix = Matrix4.CreateScale(0.2f);
-        lampMatrix = lampMatrix * Matrix4.CreateTranslation(_lightLocation);
+        lampMatrix *= Matrix4.CreateTranslation(_lightLocation);
         
         _shader.SetMatrix4("model", lampMatrix);
         _shader.SetMatrix4("view", camera.GetViewMatrix());
