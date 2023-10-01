@@ -18,78 +18,49 @@ public class Object
     
     private Shader _shader;
     
-    private Vector4 _color;
-
-    public Object(Vector4 color)
+    public Object(float[] vertices)
     {
-        _vertices = Array.Empty<float>();
-        _indices = Array.Empty<uint>();
-        _vbo = new VertexBufferObject(_vertices);
-        _vao = new VertexArrayObject();
+        _vertices = vertices;
         
-        _vboPoints = new VertexBufferObject(_vertices);
-        _vaoPoints = new VertexArrayObject();
-        
-        _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
+        _shader = new Shader("Shaders/lightShader.vert", "Shaders/lightShader.frag");
         _shader.Use();
 
-        _color = color;
+        var vertexLocation = _shader.GetAttribLocation("aPos");
+        GL.EnableVertexAttribArray(vertexLocation);
+        GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+
+        var normalLocation = _shader.GetAttribLocation("aNormal");
+        GL.EnableVertexAttribArray(normalLocation);
+        GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float),
+            3 * sizeof(float));
+        
+        _vbo = new VertexBufferObject(_vertices);
+        _vao = new VertexArrayObject();
     }
     
-    public Object()
-    {
-        _vertices = Array.Empty<float>();
-        _indices = Array.Empty<uint>();
-        _vbo = new VertexBufferObject(_vertices);
-        _vao = new VertexArrayObject();
-        
-        _vboPoints = new VertexBufferObject(_vertices);
-        _vaoPoints = new VertexArrayObject();
-        
-        _shader = new Shader("Shaders/shader.vert", "Shaders/shader.frag");
-        _shader.Use();
-
-        _color = new Vector4();
-    }
-
-    public void Render(float pointSize)
-    {
-        GL.PointSize(pointSize);
-        GL.LineWidth(2.0f);
-        
-        _shader.Use();
-
-        int vertexColorLocation = GL.GetUniformLocation(_shader.Handle, "Color");
-        GL.Uniform4(vertexColorLocation, _color);
-        
-        UpdateBuffers();
-        
-        GL.DrawElements(PrimitiveType.Points, _indices.Length, DrawElementsType.UnsignedInt, 0); 
-        GL.DrawElements(PrimitiveType.LineStrip, _indices.Length, DrawElementsType.UnsignedInt, 0);
-    }
-
-    public void UpdateVertices(float x, float y)
-    {
-        Array.Resize(ref _vertices, _vertices.Length + 3);
-        _vertices[^3] = x;
-        _vertices[^2] = y;
-        _vertices[^1] = 0.0f;
-        
-        Array.Resize(ref _indices, _indices.Length + 1);
-        _indices[^1] = (uint) _indices.Length - 1;
-    }
-
-    public void OnChangeObject()
+    public void Render(Camera camera, Vector3 lightPos)
     {
         _vao.Bind();
         
-        _vaoPoints.Bind();
+        _shader.Use();
         
-        _vbo.Update(_vertices);
-        _vao.Update();
+        _shader.SetMatrix4("model", Matrix4.Identity);
+        _shader.SetMatrix4("view", camera.GetViewMatrix());
+        _shader.SetMatrix4("projection", camera.GetProjectionMatrix());
         
-        _vboPoints.Update(_vertices);
-        _vaoPoints.Update();
+        _shader.SetVector3("viewPos", camera.Position);
+        
+        _shader.SetVector3("material.ambient", new Vector3(1.0f, 0.5f, 0.31f));
+        _shader.SetVector3("material.diffuse", new Vector3(1.0f, 0.5f, 0.31f));
+        _shader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
+        _shader.SetFloat("material.shininess", 32.0f);
+        
+        _shader.SetVector3("light.position", lightPos);
+        _shader.SetVector3("light.ambient",  new Vector3(0.2f, 0.2f, 0.2f));
+        _shader.SetVector3("light.diffuse",  new Vector3(0.7f, 0.7f, 0.7f)); // darken the light a bit to fit the scene
+        _shader.SetVector3("light.specular", new Vector3(1.0f, 1.0f, 1.0f));
+        
+        GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
     }
 
     public void UpdateBuffers()
@@ -100,23 +71,6 @@ public class Object
         _vboPoints.Update(_vertices);
         _vaoPoints.Bind();
     }
-
-    public void UpdateColor(Vector3 color)
-    {
-        _color = new Vector4(color, 1.0f);
-    }
-
-    public void UpdateVerticesCoordinates(int i, float x, float y)
-    {
-        _vertices[i] = x;
-        _vertices[i + 1] = y;
-    }
-
-    public float[] GetVertices()
-        => _vertices;
-
-    public Vector3 GetColor()
-        => _color.Xyz;
 
     public void Dispose()
     {
