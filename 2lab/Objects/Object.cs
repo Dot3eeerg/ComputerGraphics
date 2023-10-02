@@ -1,4 +1,4 @@
-﻿namespace _2lab;
+﻿namespace _2lab.Objects;
 
 using Shaders;
 using BufferObjects;
@@ -24,7 +24,7 @@ public class Object
         var vertexLocation = _shader.GetAttribLocation("aPos");
         
         _vbo = new VertexBufferObject(_vertices);
-        _vao = new VertexArrayObject(vertexLocation);
+        _vao = new VertexArrayObject(vertexLocation, 6);
         _vao.EnableArray(vertexLocation, 0);
         
         var normalLocation = _shader.GetAttribLocation("aNormal");

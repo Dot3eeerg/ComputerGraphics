@@ -5,6 +5,7 @@ using OpenTK.Graphics.OpenGL4;
 public class VertexArrayObject : IDisposable
 {
     private int _handle;
+    private int _stride;
 
     public VertexArrayObject()
     {
@@ -14,10 +15,11 @@ public class VertexArrayObject : IDisposable
         //Update();
     }
     
-    public VertexArrayObject(int vertexLocation)
+    public VertexArrayObject(int vertexLocation, int stride)
     {
         _handle = GL.GenVertexArray();
         Bind();
+        _stride = stride;
         //GL.EnableVertexAttribArray(vertexLocation);
         //Update(vertexLocation);
     }
@@ -35,18 +37,24 @@ public class VertexArrayObject : IDisposable
 
     public void Update()
     {
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, _stride * sizeof(float), 0);
     }
     
     public void Update(int vertexLocation)
     {
-        GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+        GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, _stride * sizeof(float), 0);
     }
 
     public void EnableArray(int location, int offset)
     {
         GL.EnableVertexAttribArray(location);
-        GL.VertexAttribPointer(location, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), offset);
+        GL.VertexAttribPointer(location, 3, VertexAttribPointerType.Float, false, _stride * sizeof(float), offset);
+    }
+    
+    public void EnableArray(int location, int offset, int size)
+    {
+        GL.EnableVertexAttribArray(location);
+        GL.VertexAttribPointer(location, size, VertexAttribPointerType.Float, false, _stride * sizeof(float), offset);
     }
 
     public void Dispose()
