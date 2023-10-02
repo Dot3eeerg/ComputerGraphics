@@ -10,16 +10,16 @@ public class VertexArrayObject : IDisposable
     {
         _handle = GL.GenVertexArray();
         Bind();
-        GL.EnableVertexAttribArray(0);
-        Update();
+        //GL.EnableVertexAttribArray(0);
+        //Update();
     }
     
     public VertexArrayObject(int vertexLocation)
     {
         _handle = GL.GenVertexArray();
         Bind();
-        GL.EnableVertexAttribArray(vertexLocation);
-        Update(vertexLocation);
+        //GL.EnableVertexAttribArray(vertexLocation);
+        //Update(vertexLocation);
     }
 
     public void Handle()
@@ -41,6 +41,12 @@ public class VertexArrayObject : IDisposable
     public void Update(int vertexLocation)
     {
         GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+    }
+
+    public void EnableArray(int location, int offset)
+    {
+        GL.EnableVertexAttribArray(location);
+        GL.VertexAttribPointer(location, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), offset);
     }
 
     public void Dispose()

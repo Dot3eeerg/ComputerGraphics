@@ -10,11 +10,7 @@ public class Object
     private VertexBufferObject _vbo;
     private VertexArrayObject _vao;
     
-    private VertexBufferObject _vboPoints;
-    private VertexArrayObject _vaoPoints;
-    
     private float[] _vertices;
-    private uint[] _indices;
     
     private Shader _shader;
     
@@ -26,16 +22,14 @@ public class Object
         _shader.Use();
 
         var vertexLocation = _shader.GetAttribLocation("aPos");
-        GL.EnableVertexAttribArray(vertexLocation);
-        GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
-
-        var normalLocation = _shader.GetAttribLocation("aNormal");
-        GL.EnableVertexAttribArray(normalLocation);
-        GL.VertexAttribPointer(normalLocation, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float),
-            3 * sizeof(float));
         
         _vbo = new VertexBufferObject(_vertices);
-        _vao = new VertexArrayObject();
+        _vao = new VertexArrayObject(vertexLocation);
+        _vao.EnableArray(vertexLocation, 0);
+        
+        var normalLocation = _shader.GetAttribLocation("aNormal");
+
+        _vao.EnableArray(normalLocation, 3 * sizeof(float));
     }
     
     public void Render(Camera camera, Vector3 lightPos)
@@ -67,9 +61,6 @@ public class Object
     {
         _vbo.Update(_vertices);
         _vao.Bind();
-        
-        _vboPoints.Update(_vertices);
-        _vaoPoints.Bind();
     }
 
     public void Dispose()
@@ -77,11 +68,7 @@ public class Object
         _vao.Dispose();
         _vbo.Dispose();
         
-        _vaoPoints.Dispose();
-        _vboPoints.Dispose();
-
         _vertices = Array.Empty<float>();
-        _indices = Array.Empty<uint>();
         
         GC.SuppressFinalize(this);
     }

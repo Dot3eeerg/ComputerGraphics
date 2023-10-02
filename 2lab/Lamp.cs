@@ -29,6 +29,7 @@ public class Lamp
         
         _vbo = new VertexBufferObject(_vertices);
         _vao = new VertexArrayObject(vertexLocation);
+        _vao.EnableArray(vertexLocation, 0);
     }
 
     public void Render(Camera camera)
