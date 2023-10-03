@@ -206,9 +206,9 @@ public class Window : GameWindow
         
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         
-        //_object.Render(_camera, _lightPos);
+        _object.Render(_camera, _lightPos);
         //_objectTexture.Render(_camera, _lightPos);
-        _objectFrame.Render(_camera, _lightPos);
+        //_objectFrame.Render(_camera, _lightPos);
         _lamp.Render(_camera);
         
         SwapBuffers();
