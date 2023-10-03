@@ -5,7 +5,7 @@ using BufferObjects;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
-public class ObjectTexture
+public class ObjectTexture : IObject
 {
     private VertexBufferObject _vbo;
     private VertexArrayObject _vao;

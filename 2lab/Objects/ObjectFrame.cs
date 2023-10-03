@@ -1,11 +1,13 @@
-﻿namespace _2lab;
+﻿using _2lab.Objects;
+
+namespace _2lab;
 
 using Shaders;
 using BufferObjects;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
-public class ObjectFrame
+public class ObjectFrame : IObject
 {
     private VertexBufferObject _vbo;
     private VertexArrayObject _vao;

@@ -4,7 +4,7 @@ using OpenTK.Windowing.Desktop;
 
 var nativeWindowSettings = new NativeWindowSettings()
 {
-    Size = new Vector2i(1920, 1080),
+    Size = new Vector2i(1600, 900),
 };
 
 using (Window window = new Window(GameWindowSettings.Default, nativeWindowSettings))

@@ -1,7 +1,10 @@
-﻿namespace _2lab;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace _2lab;
 
 using Shaders;
 using Objects;
+using GUI;
 
 using System;
 using System.Collections.Generic;
@@ -171,11 +174,16 @@ public class Window : GameWindow
     private ObjectFrame _objectFrame;
     private Lamp _lamp;
 
+    private IObject _currentObject;
+
     private Camera _camera;
 
     private bool _firstMove = true;
 
     private Vector2 _lastPos;
+
+    private GUI.GUI _gui;
+    private ImGuiController _controller;
     
     public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         : base(gameWindowSettings, nativeWindowSettings)
@@ -194,22 +202,31 @@ public class Window : GameWindow
         _objectTexture = new ObjectTexture(_verticesTexture);
         _objectFrame = new ObjectFrame(_verticesFrame);
         _lamp = new Lamp(_lightPos, _vertices);
+
+        _currentObject = _object;
+
+        _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
+        _gui = new GUI.GUI(_controller, this);
         
         _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y, Size.X, Size.Y);
 
-        CursorState = CursorState.Grabbed;
+        //CursorState = CursorState.Grabbed;
     }
 
+    [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: OpenTK.Windowing.GraphicsLibraryFramework.Keys; size: 306MB")]
     protected override void OnRenderFrame(FrameEventArgs e)
     {
         base.OnRenderFrame(e);
         
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         
-        _object.Render(_camera, _lightPos);
-        //_objectTexture.Render(_camera, _lightPos);
-        //_objectFrame.Render(_camera, _lightPos);
+        _currentObject.Render(_camera, _lightPos);
         _lamp.Render(_camera);
+        
+        _controller.Update(this, (float)e.Time);
+        _gui.Draw();
+        
+        _controller.Render();
         
         SwapBuffers();
     }
@@ -280,5 +297,20 @@ public class Window : GameWindow
         base.OnResize(e);
         
         GL.Viewport(0, 0, Size.X, Size.Y);
+    }
+
+    public void ChangeToMaterialModel()
+    {
+        _currentObject = _object;
+    }
+
+    public void ChangeToTextureObject()
+    {
+        _currentObject = _objectTexture;
+    }
+
+    public void ChangeToFrameObject()
+    {
+        _currentObject = _objectFrame;
     }
 }
