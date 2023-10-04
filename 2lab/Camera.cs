@@ -19,6 +19,8 @@ public class Camera
     private float _fov = MathHelper.PiOver2;
     
     public Vector3 Position;
+
+    public bool IsPerspective = true;
     
     public float AspectRatio { private get; set; }
     
@@ -76,8 +78,15 @@ public class Camera
     
     public Matrix4 GetProjectionMatrix()
     {
-        return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 100f);
-        //return Matrix4.CreateOrthographicOffCenter(-Width / 150.0f, Width / 150.0f, -Height / 150.0f, Height / 150.0f, 0.1f, 100.0f);
+        switch (IsPerspective)
+        {
+            case true:
+                return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 100f);
+            
+            case false:
+                return Matrix4.CreateOrthographicOffCenter(-Width / 150.0f, Width / 150.0f, -Height / 150.0f,
+                    Height / 150.0f, 0.1f, 100.0f);
+        }
     }
     
     private void UpdateVectors()

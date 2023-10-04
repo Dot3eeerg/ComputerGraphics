@@ -8,6 +8,13 @@ public class GUI
     private ImGuiController _controller;
 
     private Window _window;
+
+    private readonly string[] _modelType;
+    private readonly string[] _modeName;
+
+    private int _selectedModelType;
+
+    private int _appModes;
     
     private ImGuiWindowFlags _windowFlags =
         ImGuiWindowFlags.NoDecoration |
@@ -21,6 +28,19 @@ public class GUI
     {
         _controller = controller;
         _window = window;
+
+        _modelType = new string[3]
+        {
+            "Material model",
+            "Texture model",
+            "Frame model"
+        };
+
+        _modeName = new string[2]
+        {
+            "Movement mode",
+            "Cursor mode"
+        };
         
         ImGui.PushStyleColor(ImGuiCol.Text, new System.Numerics.Vector4(1.0f, 1.0f, 1.0f, 1.0f));
         ImGui.PushStyleColor(ImGuiCol.FrameBg, new System.Numerics.Vector4(0.1f, 0.1f, 0.1f, 0.8f));
@@ -32,26 +52,49 @@ public class GUI
     public void Draw()
     {
         ImGui.SetNextWindowBgAlpha(1.0f);
-        ImGui.SetNextWindowPos(new System.Numerics.Vector2(1400.0f, 40.0f));
-        if (ImGui.Begin("View model"))
+        ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 40.0f));
+        if (ImGui.Begin("View model", _windowFlags))
         {
-            ImGui.Text("kek");
-            if (ImGui.Button("Material model"))
+            bool selectionChanged = ImGui.Combo("", ref _selectedModelType, _modelType, _modelType.Length);
+
+            if (selectionChanged)
             {
-                _window.ChangeToMaterialModel();
-            }
-            
-            if (ImGui.Button("Texture model"))
-            {
-                _window.ChangeToTextureObject();
-            }
-            
-            if (ImGui.Button("Frame model"))
-            {
-                _window.ChangeToFrameObject();
+                switch (_selectedModelType)
+                {
+                    case 0:
+                        _window.ChangeToMaterialModel();
+                        break;
+                        
+                    case 1:
+                        _window.ChangeToTextureObject();
+                        break;
+                        
+                    case 2:
+                        _window.ChangeToFrameObject();
+                        break;
+                }
             }
             
             ImGui.End();
         }
+        
+        //ImGui.SetNextWindowBgAlpha(1.0f);
+        //ImGui.SetNextWindowPos(new System.Numerics.Vector2(200.0f, 40.0f));
+        //if (ImGui.Begin("App modes", _windowFlags))
+        //{
+        //    ImGui.BeginGroup();
+        //    {
+        //        
+        //    }
+        //}
+        
+        ImGui.SetNextWindowBgAlpha(1.0f);
+        ImGui.SetNextWindowPos(new System.Numerics.Vector2(960.0f, 40.0f));
+        ImGui.Begin("Text", _windowFlags);
+        {
+            ImGui.Text(_modeName[_window.CurrentAppMode]);
+            ImGui.End();
+        }
+        
     }
 }

@@ -2,13 +2,9 @@
 
 namespace _2lab;
 
-using Shaders;
 using Objects;
 using GUI;
 
-using System;
-using System.Collections.Generic;
-using ImGuiNET;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -169,7 +165,7 @@ public class Window : GameWindow
     
     private Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
     
-    private Objects.Object _object;
+    private Object _object;
     private ObjectTexture _objectTexture;
     private ObjectFrame _objectFrame;
     private Lamp _lamp;
@@ -184,6 +180,16 @@ public class Window : GameWindow
 
     private GUI.GUI _gui;
     private ImGuiController _controller;
+
+    private bool _canMove;
+    
+    private enum AppMode
+    {
+        MovementMode,
+        CursorMode
+    }
+
+    public int CurrentAppMode = (int) AppMode.CursorMode;
     
     public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         : base(gameWindowSettings, nativeWindowSettings)
@@ -198,7 +204,7 @@ public class Window : GameWindow
         
         GL.Enable(EnableCap.DepthTest);
 
-        _object = new Objects.Object(_vertices);
+        _object = new Object(_vertices);
         _objectTexture = new ObjectTexture(_verticesTexture);
         _objectFrame = new ObjectFrame(_verticesFrame);
         _lamp = new Lamp(_lightPos, _vertices);
@@ -209,11 +215,9 @@ public class Window : GameWindow
         _gui = new GUI.GUI(_controller, this);
         
         _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y, Size.X, Size.Y);
-
-        //CursorState = CursorState.Grabbed;
     }
 
-    [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: OpenTK.Windowing.GraphicsLibraryFramework.Keys; size: 306MB")]
+    [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: OpenTK.Windowing.GraphicsLibraryFramework.Keys; size: 477MB")]
     protected override void OnRenderFrame(FrameEventArgs e)
     {
         base.OnRenderFrame(e);
@@ -240,6 +244,7 @@ public class Window : GameWindow
         }
 
         var input = KeyboardState;
+        var mouse = MouseState;
 
         if (input.IsKeyDown(Keys.Escape))
         {
@@ -249,47 +254,75 @@ public class Window : GameWindow
         const float cameraSpeed = 1.5f;
         const float sensitivity = 0.2f;
 
-        if (input.IsKeyDown(Keys.W))
+        if (input.IsKeyDown(Keys.M))
         {
-            _camera.Position += _camera.Front * cameraSpeed * (float)e.Time; // Forward
-        }
-        if (input.IsKeyDown(Keys.S))
-        {
-            _camera.Position -= _camera.Front * cameraSpeed * (float)e.Time; // Backwards
-        }
-        if (input.IsKeyDown(Keys.A))
-        {
-            _camera.Position -= _camera.Right * cameraSpeed * (float)e.Time; // Left
-        }
-        if (input.IsKeyDown(Keys.D))
-        {
-            _camera.Position += _camera.Right * cameraSpeed * (float)e.Time; // Right
-        }
-        if (input.IsKeyDown(Keys.Space))
-        {
-            _camera.Position += _camera.Up * cameraSpeed * (float)e.Time; // Up
-        }
-        if (input.IsKeyDown(Keys.LeftShift))
-        {
-            _camera.Position -= _camera.Up * cameraSpeed * (float)e.Time; // Down
+            _canMove = true;
+            
+            CursorState = CursorState.Grabbed;
+            CurrentAppMode = (int)AppMode.MovementMode;
         }
 
-        var mouse = MouseState;
-
-        if (_firstMove)
+        if (input.IsKeyDown(Keys.N))
         {
-            _lastPos = new Vector2(mouse.X, mouse.Y);
-            _firstMove = false;
+            _canMove = false;
+            
+            CursorState = CursorState.Normal;
+            CurrentAppMode = (int)AppMode.CursorMode;
         }
-        else
-        {
-            var deltaX = mouse.X - _lastPos.X;
-            var deltaY = mouse.Y - _lastPos.Y;
-            _lastPos = new Vector2(mouse.X, mouse.Y);
 
-            _camera.Yaw += deltaX * sensitivity;
-            _camera.Pitch -= deltaY * sensitivity;
+        if (input.IsKeyDown(Keys.P))
+        {
+            _camera.IsPerspective = true;
         }
+        
+        if (input.IsKeyDown(Keys.O))
+        {
+            _camera.IsPerspective = false;
+        }
+
+        if (_canMove)
+        {
+            if (input.IsKeyDown(Keys.W))
+            {
+                _camera.Position += _camera.Front * cameraSpeed * (float)e.Time; // Forward
+            }
+            if (input.IsKeyDown(Keys.S))
+            {
+                _camera.Position -= _camera.Front * cameraSpeed * (float)e.Time; // Backwards
+            }
+            if (input.IsKeyDown(Keys.A))
+            {
+                _camera.Position -= _camera.Right * cameraSpeed * (float)e.Time; // Left
+            }
+            if (input.IsKeyDown(Keys.D))
+            {
+                _camera.Position += _camera.Right * cameraSpeed * (float)e.Time; // Right
+            }
+            if (input.IsKeyDown(Keys.Space))
+            {
+                _camera.Position += _camera.Up * cameraSpeed * (float)e.Time; // Up
+            }
+            if (input.IsKeyDown(Keys.LeftShift))
+            {
+                _camera.Position -= _camera.Up * cameraSpeed * (float)e.Time; // Down
+            }
+
+            if (_firstMove)
+            {
+                _lastPos = new Vector2(mouse.X, mouse.Y);
+                _firstMove = false;
+            }
+            else
+            {
+                var deltaX = mouse.X - _lastPos.X;
+                var deltaY = mouse.Y - _lastPos.Y;
+                _lastPos = new Vector2(mouse.X, mouse.Y);
+
+                _camera.Yaw += deltaX * sensitivity;
+                _camera.Pitch -= deltaY * sensitivity;
+            }
+        }
+
     }
 
     protected override void OnResize(ResizeEventArgs e)
