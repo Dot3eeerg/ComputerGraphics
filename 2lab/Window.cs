@@ -178,8 +178,6 @@ public class Window : GameWindow
 
     private Vector2 _lastPos;
 
-    private Vector2 _lastCursorPos;
-
     private GUI.GUI _gui;
     private ImGuiController _controller;
 
@@ -219,7 +217,6 @@ public class Window : GameWindow
         _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y, Size.X, Size.Y);
     }
 
-    [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: OpenTK.Windowing.GraphicsLibraryFramework.Keys; size: 477MB")]
     protected override void OnRenderFrame(FrameEventArgs e)
     {
         base.OnRenderFrame(e);
