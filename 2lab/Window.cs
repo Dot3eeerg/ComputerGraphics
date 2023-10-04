@@ -178,6 +178,8 @@ public class Window : GameWindow
 
     private Vector2 _lastPos;
 
+    private Vector2 _lastCursorPos;
+
     private GUI.GUI _gui;
     private ImGuiController _controller;
 
@@ -257,6 +259,7 @@ public class Window : GameWindow
         if (input.IsKeyDown(Keys.M))
         {
             _canMove = true;
+            _lastPos = new Vector2(mouse.X, mouse.Y);
             
             CursorState = CursorState.Grabbed;
             CurrentAppMode = (int)AppMode.MovementMode;
