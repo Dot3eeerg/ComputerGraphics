@@ -78,16 +78,6 @@ public class GUI
             ImGui.End();
         }
         
-        //ImGui.SetNextWindowBgAlpha(1.0f);
-        //ImGui.SetNextWindowPos(new System.Numerics.Vector2(200.0f, 40.0f));
-        //if (ImGui.Begin("App modes", _windowFlags))
-        //{
-        //    ImGui.BeginGroup();
-        //    {
-        //        
-        //    }
-        //}
-        
         ImGui.SetNextWindowBgAlpha(1.0f);
         ImGui.SetNextWindowPos(new System.Numerics.Vector2(960.0f, 40.0f));
         ImGui.Begin("Text", _windowFlags);
@@ -95,6 +85,5 @@ public class GUI
             ImGui.Text(_modeName[_window.CurrentAppMode]);
             ImGui.End();
         }
-        
     }
 }
