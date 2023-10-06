@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace _2lab;
+﻿namespace _2lab;
 
 using Objects;
 using GUI;
