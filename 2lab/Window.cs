@@ -173,6 +173,7 @@ public class Window : GameWindow
     private ObjectTexture _objectTexture;
     private ObjectFrame _objectFrame;
     private Lamp _lamp;
+    
 
     private IObject _currentObject;
 
@@ -349,5 +350,21 @@ public class Window : GameWindow
     public void ChangeToFrameObject()
     {
         _currentObject = _objectFrame;
+    }
+
+    public void TurnOnFlashlight()
+    {
+        if (_currentObject != _objectFrame)
+        {
+            _currentObject.TurnOnFlashlight();
+        }
+    }
+    
+    public void TurnOffFlashlight()
+    {
+        if (_currentObject != _objectFrame)
+        {
+            _currentObject.TurnOffFlashlight();
+        }
     }
 }

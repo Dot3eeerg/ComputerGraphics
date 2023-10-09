@@ -13,6 +13,7 @@ public class GUI
     private readonly string[] _modeName;
 
     private int _selectedModelType;
+    private bool _isClicked = false;
 
     private int _appModes;
     
@@ -76,6 +77,25 @@ public class GUI
             }
             
             ImGui.End();
+        }
+
+        if (_selectedModelType != 2)
+        {
+            ImGui.SetNextWindowBgAlpha(1.0f);
+            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 80.0f));
+            if (ImGui.Begin("Flashlight", _windowFlags))
+            {
+                ImGui.Checkbox("On/Off", ref _isClicked);
+                if (_isClicked)
+                {
+                    _window.TurnOnFlashlight();
+                }
+
+                else
+                {
+                    _window.TurnOffFlashlight();
+                }
+            }
         }
         
         ImGui.SetNextWindowBgAlpha(1.0f);

@@ -72,7 +72,6 @@ public class Shader
         GL.GetProgram(program, GetProgramParameterName.LinkStatus, out var code);
         if (code != (int)All.True)
         {
-            // We can use `GL.GetProgramInfoLog(program)` to get information about the error.
             throw new Exception($"Error occurred whilst linking Program({program})");
         }
     }

@@ -4,7 +4,17 @@ namespace _2lab.Objects;
 
 public interface IObject
 {
-    public void Render(Camera _camera, Vector3 _lightPos)
+    public void Render(Camera camera, Vector3 lightPos)
+    {
+        
+    }
+    
+    public void TurnOnFlashlight()
+    {
+        
+    }
+    
+    public void TurnOffFlashlight()
     {
         
     }
