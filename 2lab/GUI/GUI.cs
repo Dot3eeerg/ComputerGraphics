@@ -85,7 +85,7 @@ public class GUI
             ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 80.0f));
             if (ImGui.Begin("Flashlight", _windowFlags))
             {
-                ImGui.Checkbox("On/Off", ref _isClicked);
+                ImGui.Checkbox("Flashlight on/off", ref _isClicked);
                 if (_isClicked)
                 {
                     _window.TurnOnFlashlight();

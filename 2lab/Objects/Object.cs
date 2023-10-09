@@ -51,6 +51,12 @@ public class Object : IObject
         _shader.SetVector3("material.diffuse", new Vector3(1.0f, 0.5f, 0.31f));
         _shader.SetVector3("material.specular", new Vector3(0.5f, 0.5f, 0.5f));
         _shader.SetFloat("material.shininess", 32.0f);
+        
+        // Directional light
+        _shader.SetVector3("dirLight.direction", new Vector3(-0.2f, -1.0f, -0.3f));
+        _shader.SetVector3("dirLight.ambient", new Vector3(0.05f, 0.05f, 0.05f));
+        _shader.SetVector3("dirLight.diffuse", new Vector3(0.4f, 0.4f, 0.4f));
+        _shader.SetVector3("dirLight.specular", new Vector3(0.5f, 0.5f, 0.5f));
 
         // Point light
         _shader.SetVector3($"pointLights[0].position", lightPos);
