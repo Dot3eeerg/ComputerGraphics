@@ -11,6 +11,57 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 public class Window : GameWindow
 {
+    private readonly float[] _normals =
+    {
+        -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -1.0f, // Front face
+         0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -1.0f,
+         0.5f,  0.5f, -0.5f, 0.5f,  0.5f, -1.0f,
+         
+         0.5f,  0.5f, -0.5f, 0.5f,  0.5f, -1.0f,
+        -0.5f,  0.5f, -0.5f, -0.5f,  0.5f, -1.0f,
+        -0.5f, -0.5f, -0.5f, -0.5f,  -0.5f, -1.0f,
+        
+        -0.5f, -0.5f,  0.5f, -0.5f,  -0.5f,  1.0f, // Back face
+         0.5f, -0.5f,  0.5f, 0.5f,  -0.5f,  1.0f,
+         0.5f,  0.5f,  0.5f, 0.5f,  0.5f,  1.0f,
+         
+         0.5f,  0.5f,  0.5f, 0.5f,  0.5f,  1.0f,
+        -0.5f,  0.5f,  0.5f, -0.5f,  0.5f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -0.5f,  -0.5f,  1.0f,
+        
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.5f,  0.5f, // Left face
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.5f,  -0.5f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  -0.5f,  -0.5f,
+        
+        -0.5f, -0.5f, -0.5f, -1.0f, -0.5f, -0.5f,
+        -0.5f, -0.5f,  0.5f, -1.0f, -0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.5f,  0.5f,
+        
+         0.5f,  0.5f,  0.5f,  1.0f, 0.5f,  0.5f,  // Right face
+         0.5f,  0.5f, -0.5f,  1.0f, 0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f,  1.0f, -0.5f, -0.5f, 
+                                                
+         0.5f, -0.5f, -0.5f,  1.0f, -0.5f, -0.5f, 
+         0.5f, -0.5f,  0.5f,  1.0f, -0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f,  1.0f, 0.5f,  0.5f, 
+
+        -0.5f, -0.5f, -0.5f, -0.5f, -1.0f, -0.5f, // Bottom face
+         0.5f, -0.5f, -0.5f,  0.5f, -1.0f, -0.5f,
+         0.5f, -0.5f,  0.5f,  0.5f, -1.0f,  0.5f,
+                                                
+         0.5f, -0.5f,  0.5f,  0.5f, -1.0f,  0.5f,
+        -0.5f, -0.5f,  0.5f, -0.5f, -1.0f,  0.5f,
+        -0.5f, -0.5f, -0.5f, -0.5f, -1.0f, -0.5f,
+                                                
+        -0.5f,  0.5f, -0.5f, -0.5f,  1.0f, -0.5f, // Top face
+         0.5f,  0.5f, -0.5f,  0.5f,  1.0f, -0.5f,
+         0.5f,  0.5f,  0.5f,  0.5f,  1.0f,  0.5f,
+                                                
+         0.5f,  0.5f,  0.5f,  0.5f,  1.0f,  0.5f,
+        -0.5f,  0.5f,  0.5f, -0.5f,  1.0f,  0.5f,
+        -0.5f,  0.5f, -0.5f, -0.5f,  1.0f, -0.5f
+    };
+    
     private readonly float[] _vertices =
     {
          // Position          Normal
@@ -172,14 +223,15 @@ public class Window : GameWindow
     private Object _object;
     private ObjectTexture _objectTexture;
     private ObjectFrame _objectFrame;
+    private ObjectNormal _objectNormal;
     private Lamp _lamp;
     
-
     private IObject _currentObject;
 
     private Camera _camera;
 
     private bool _firstMove = true;
+    private bool _renderNormals = false;
 
     private Vector2 _lastPos;
 
@@ -212,6 +264,7 @@ public class Window : GameWindow
         _object = new Object(_vertices);
         _objectTexture = new ObjectTexture(_verticesTexture);
         _objectFrame = new ObjectFrame(_verticesFrame);
+        _objectNormal = new ObjectNormal(_normals);
         _lamp = new Lamp(_lightPos, _vertices);
 
         _currentObject = _object;
@@ -229,6 +282,10 @@ public class Window : GameWindow
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         
         _currentObject.Render(_camera, _lightPos);
+        if (_renderNormals)
+        {
+            _objectNormal.Render(_camera, _lightPos);
+        }
         _lamp.Render(_camera);
         
         _controller.Update(this, (float)e.Time);
@@ -366,5 +423,15 @@ public class Window : GameWindow
         {
             _currentObject.TurnOffFlashlight();
         }
+    }
+
+    public void TurnOnNormals()
+    {
+        _renderNormals = true;
+    }
+    
+    public void TurnOffNormals()
+    {
+        _renderNormals = false;
     }
 }

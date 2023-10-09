@@ -13,7 +13,8 @@ public class GUI
     private readonly string[] _modeName;
 
     private int _selectedModelType;
-    private bool _isClicked = false;
+    private bool _isClickedFlashlight = false;
+    private bool _isClickedNormals = false;
 
     private int _appModes;
     
@@ -82,11 +83,11 @@ public class GUI
         if (_selectedModelType != 2)
         {
             ImGui.SetNextWindowBgAlpha(1.0f);
-            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 80.0f));
+            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 120.0f));
             if (ImGui.Begin("Flashlight", _windowFlags))
             {
-                ImGui.Checkbox("Flashlight on/off", ref _isClicked);
-                if (_isClicked)
+                ImGui.Checkbox("Flashlight on/off", ref _isClickedFlashlight);
+                if (_isClickedFlashlight)
                 {
                     _window.TurnOnFlashlight();
                 }
@@ -95,6 +96,22 @@ public class GUI
                 {
                     _window.TurnOffFlashlight();
                 }
+            }
+        }
+        
+        ImGui.SetNextWindowBgAlpha(1.0f);
+        ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 80.0f));
+        if (ImGui.Begin("Show normals", _windowFlags))
+        {
+            ImGui.Checkbox("Normals on/off", ref _isClickedNormals);
+            if (_isClickedNormals)
+            {
+                _window.TurnOnNormals();
+            }
+
+            else
+            {
+                _window.TurnOffNormals();
             }
         }
         
