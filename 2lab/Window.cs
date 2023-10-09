@@ -219,6 +219,9 @@ public class Window : GameWindow
     };
     
     private Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
+    private Vector3 _cubePosition;
+
+    private float _scale;
     
     private Object _object;
     private ObjectTexture _objectTexture;
@@ -256,15 +259,52 @@ public class Window : GameWindow
     protected override void OnLoad()
     {
         base.OnLoad();
+
+        using (var sr = new StreamReader("Input/Section"))
+        {
+            string[] data;
+
+            data = sr.ReadLine()!.Split(" ").ToArray();
+
+            _cubePosition = new Vector3(Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
+            
+            data = sr.ReadLine()!.Split(" ").ToArray();
+
+            _cubePosition += (Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
+            _cubePosition /= 2;
+            
+            
+            data = sr.ReadLine()!.Split(" ").ToArray();
+
+            Vector3 kek2 = new Vector3(Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
+            
+            data = sr.ReadLine()!.Split(" ").ToArray();
+
+            kek2 += (Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
+            kek2 /= 2;
+
+            _cubePosition += kek2;
+            _cubePosition /= 2;
+        }
+
+        using (var sr = new StreamReader("Input/Replication"))
+        {
+            string[] data;
+
+            _scale = Convert.ToSingle(sr.ReadLine());
+
+            data = sr.ReadLine()!.Split(" ").ToArray();
+            _cubePosition += (Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
+        }
         
         GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         
         GL.Enable(EnableCap.DepthTest);
 
-        _object = new Object(_vertices);
-        _objectTexture = new ObjectTexture(_verticesTexture);
-        _objectFrame = new ObjectFrame(_verticesFrame);
-        _objectNormal = new ObjectNormal(_normals);
+        _object = new Object(_vertices, _cubePosition, _scale);
+        _objectTexture = new ObjectTexture(_verticesTexture, _cubePosition, _scale);
+        _objectFrame = new ObjectFrame(_verticesFrame, _cubePosition, _scale);
+        _objectNormal = new ObjectNormal(_normals, _cubePosition, _scale);
         _lamp = new Lamp(_lightPos, _vertices);
 
         _currentObject = _object;

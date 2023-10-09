@@ -16,9 +16,14 @@ public class ObjectFrame : IObject
     
     private Shader _shader;
     
-    public ObjectFrame(float[] vertices)
+    private Vector3 _position;
+    private float _scale;
+    
+    public ObjectFrame(float[] vertices, Vector3 position, float scale)
     {
         _vertices = vertices;
+        _position = position;
+        _scale = scale;
         
         _shader = new Shader("Shaders/frameShader.vert", "Shaders/frameShader.frag");
         _shader.Use();
@@ -35,8 +40,9 @@ public class ObjectFrame : IObject
         _vao.Bind();
         
         _shader.Use();
-        
-        _shader.SetMatrix4("model", Matrix4.Identity);
+
+        Matrix4 model = Matrix4.CreateScale(_scale) * Matrix4.CreateTranslation(_position);
+        _shader.SetMatrix4("model", model);
         _shader.SetMatrix4("view", camera.GetViewMatrix());
         _shader.SetMatrix4("projection", camera.GetProjectionMatrix());
         

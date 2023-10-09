@@ -15,10 +15,15 @@ public class Object : IObject
     private Shader _shader;
     
     private float[] _flashLightValues = {0.0f, 0.0f};
+
+    private Vector3 _position;
+    private float _scale;
     
-    public Object(float[] vertices)
+    public Object(float[] vertices, Vector3 position, float scale)
     {
         _vertices = vertices;
+        _position = position;
+        _scale = scale;
         
         _shader = new Shader("Shaders/lightShader.vert", "Shaders/lightShader.frag");
         _shader.Use();
@@ -40,7 +45,7 @@ public class Object : IObject
         
         _shader.Use();
         
-        Matrix4 model = Matrix4.CreateTranslation(new Vector3(0.0f, 0.0f, 0.0f));
+        Matrix4 model = Matrix4.CreateScale(_scale) * Matrix4.CreateTranslation(_position);
         _shader.SetMatrix4("model", model);
         _shader.SetMatrix4("view", camera.GetViewMatrix());
         _shader.SetMatrix4("projection", camera.GetProjectionMatrix());

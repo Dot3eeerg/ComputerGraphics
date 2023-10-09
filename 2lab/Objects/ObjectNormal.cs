@@ -13,11 +13,16 @@ public class ObjectNormal
     private float[] _vertices;
     
     private Shader _shader;
+
+    private Vector3 _position;
+    private float _scale;
     
     
-    public ObjectNormal(float[] vertices)
+    public ObjectNormal(float[] vertices, Vector3 position, float scale)
     {
         _vertices = vertices;
+        _position = position;
+        _scale = scale;
         
         _shader = new Shader("Shaders/normalShader.vert", "Shaders/normalShader.frag");
         _shader.Use();
@@ -35,7 +40,7 @@ public class ObjectNormal
         
         _shader.Use();
         
-        Matrix4 model = Matrix4.CreateTranslation(new Vector3(0.0f, 0.0f, 0.0f));
+        Matrix4 model = Matrix4.CreateScale(_scale) * Matrix4.CreateTranslation(_position);
         _shader.SetMatrix4("model", model);
         _shader.SetMatrix4("view", camera.GetViewMatrix());
         _shader.SetMatrix4("projection", camera.GetProjectionMatrix());
