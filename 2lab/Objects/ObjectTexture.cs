@@ -44,8 +44,11 @@ public class ObjectTexture : IObject
         var texCoordLocation = _shader.GetAttribLocation("aTexCoords");
         _vao.EnableArray(texCoordLocation, 6 * sizeof(float), 2);
 
-        _diffuseMap = Texture.LoadFromFile("Resources/container2.png");
-        _specularMap = Texture.LoadFromFile("Resources/container2_specular.png");
+        //_diffuseMap = Texture.LoadFromFile("Resources/container2.png");
+        //_specularMap = Texture.LoadFromFile("Resources/container2_specular.png");
+        
+        _diffuseMap = Texture.LoadFromFile("Resources/chu.jpg");
+        _specularMap = Texture.LoadFromFile("Resources/chu_specular.png");
     }
     
     public void Render(Camera camera, Vector3 lightPos)
