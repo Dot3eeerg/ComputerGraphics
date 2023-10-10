@@ -47,8 +47,11 @@ public class ObjectTexture : IObject
         //_diffuseMap = Texture.LoadFromFile("Resources/container2.png");
         //_specularMap = Texture.LoadFromFile("Resources/container2_specular.png");
         
-        _diffuseMap = Texture.LoadFromFile("Resources/chu.jpg");
-        _specularMap = Texture.LoadFromFile("Resources/chu_specular.png");
+        //_diffuseMap = Texture.LoadFromFile("Resources/chu.jpg");
+        //_specularMap = Texture.LoadFromFile("Resources/chu_specular.png");
+        
+        _diffuseMap = Texture.LoadFromFile("Resources/bobik.jpg");
+        _specularMap = Texture.LoadFromFile("Resources/bobik_specular.png");
     }
     
     public void Render(Camera camera, Vector3 lightPos)
