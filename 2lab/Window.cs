@@ -16,50 +16,32 @@ public class Window : GameWindow
         -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -1.0f, // Front face
          0.5f, -0.5f, -0.5f, 0.5f, -0.5f, -1.0f,
          0.5f,  0.5f, -0.5f, 0.5f,  0.5f, -1.0f,
-         
-         0.5f,  0.5f, -0.5f, 0.5f,  0.5f, -1.0f,
         -0.5f,  0.5f, -0.5f, -0.5f,  0.5f, -1.0f,
-        -0.5f, -0.5f, -0.5f, -0.5f,  -0.5f, -1.0f,
         
         -0.5f, -0.5f,  0.5f, -0.5f,  -0.5f,  1.0f, // Back face
          0.5f, -0.5f,  0.5f, 0.5f,  -0.5f,  1.0f,
          0.5f,  0.5f,  0.5f, 0.5f,  0.5f,  1.0f,
-         
-         0.5f,  0.5f,  0.5f, 0.5f,  0.5f,  1.0f,
         -0.5f,  0.5f,  0.5f, -0.5f,  0.5f,  1.0f,
-        -0.5f, -0.5f,  0.5f, -0.5f,  -0.5f,  1.0f,
         
         -0.5f,  0.5f,  0.5f, -1.0f,  0.5f,  0.5f, // Left face
         -0.5f,  0.5f, -0.5f, -1.0f,  0.5f,  -0.5f,
         -0.5f, -0.5f, -0.5f, -1.0f,  -0.5f,  -0.5f,
-        
-        -0.5f, -0.5f, -0.5f, -1.0f, -0.5f, -0.5f,
         -0.5f, -0.5f,  0.5f, -1.0f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.5f,  0.5f,
         
          0.5f,  0.5f,  0.5f,  1.0f, 0.5f,  0.5f,  // Right face
          0.5f,  0.5f, -0.5f,  1.0f, 0.5f, -0.5f, 
          0.5f, -0.5f, -0.5f,  1.0f, -0.5f, -0.5f, 
-                                                
-         0.5f, -0.5f, -0.5f,  1.0f, -0.5f, -0.5f, 
          0.5f, -0.5f,  0.5f,  1.0f, -0.5f,  0.5f, 
-         0.5f,  0.5f,  0.5f,  1.0f, 0.5f,  0.5f, 
 
         -0.5f, -0.5f, -0.5f, -0.5f, -1.0f, -0.5f, // Bottom face
          0.5f, -0.5f, -0.5f,  0.5f, -1.0f, -0.5f,
          0.5f, -0.5f,  0.5f,  0.5f, -1.0f,  0.5f,
-                                                
-         0.5f, -0.5f,  0.5f,  0.5f, -1.0f,  0.5f,
         -0.5f, -0.5f,  0.5f, -0.5f, -1.0f,  0.5f,
-        -0.5f, -0.5f, -0.5f, -0.5f, -1.0f, -0.5f,
-                                                
+        
         -0.5f,  0.5f, -0.5f, -0.5f,  1.0f, -0.5f, // Top face
          0.5f,  0.5f, -0.5f,  0.5f,  1.0f, -0.5f,
          0.5f,  0.5f,  0.5f,  0.5f,  1.0f,  0.5f,
-                                                
-         0.5f,  0.5f,  0.5f,  0.5f,  1.0f,  0.5f,
         -0.5f,  0.5f,  0.5f, -0.5f,  1.0f,  0.5f,
-        -0.5f,  0.5f, -0.5f, -0.5f,  1.0f, -0.5f
     };
     
     private readonly float[] _vertices =
@@ -218,6 +200,118 @@ public class Window : GameWindow
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
     
+    private readonly float[] _normalsSmoothed =
+    {
+        -0.5f, -0.5f, -0.5f, -1.0f, -1.0f, -1.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, -1.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f, 1.0f, -1.0f,
+         0.5f,  0.5f, -0.5f, 1.0f,  1.0f, -1.0f,
+         
+        -0.5f, -0.5f, 0.5f, -1.0f, -1.0f, 1.0f,
+         0.5f, -0.5f, 0.5f, 1.0f, -1.0f, 1.0f,
+        -0.5f,  0.5f, 0.5f, -1.0f, 1.0f, 1.0f,
+         0.5f,  0.5f, 0.5f, 1.0f,  1.0f, 1.0f,
+    };
+    
+    
+    private readonly float[] _verticesSmoothed =
+    {
+         // Position          Normal
+        -0.5f, -0.5f, -0.5f,  -1.0f,  -1.0f, -1.0f, // Front face
+         0.5f, -0.5f, -0.5f,  1.0f,  -1.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f, -1.0f,
+         
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,  -1.0f,  1.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,  -1.0f,  -1.0f, -1.0f,
+
+        -0.5f, -0.5f,  0.5f,  -1.0f,  -1.0f,  1.0f, // Back face
+         0.5f, -0.5f,  0.5f,  1.0f,  -1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
+         
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  -1.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  -1.0f,  -1.0f,  1.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  1.0f,  1.0f, // Left face
+        -0.5f,  0.5f, -0.5f, -1.0f,  1.0f,  -1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  -1.0f,  -1.0f,
+        
+        -0.5f, -0.5f, -0.5f, -1.0f,  -1.0f,  -1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  -1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  1.0f,  1.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f, // Right face
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  -1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  -1.0f,  -1.0f,
+         
+         0.5f, -0.5f, -0.5f,  1.0f,  -1.0f,  -1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  -1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
+
+        -0.5f, -0.5f, -0.5f,  -1.0f, -1.0f,  -1.0f, // Bottom face
+         0.5f, -0.5f, -0.5f,  1.0f, -1.0f,  -1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, -1.0f,  1.0f,
+         
+         0.5f, -0.5f,  0.5f,  1.0f, -1.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  -1.0f, -1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  -1.0f, -1.0f,  -1.0f,
+
+        -0.5f,  0.5f, -0.5f,  -1.0f,  1.0f,  -1.0f, // Top face
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  -1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
+         
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  -1.0f,  1.0f,  -1.0f
+    };
+    
+    private readonly float[] _verticesTextureSmoothed =
+    {
+        // Positions          Normals              Texture coords
+        -0.5f, -0.5f, -0.5f,  -1.0f,  -1.0f, -1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  -1.0f, -1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  -1.0f,  1.0f, -1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  -1.0f,  -1.0f, -1.0f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  -1.0f,  -1.0f,  1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  -1.0f,  1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  -1.0f,  1.0f,  1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  -1.0f,  -1.0f,  1.0f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  -1.0f,  1.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  -1.0f,  1.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  -1.0f,  -1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  -1.0f,  -1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  -1.0f,  1.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  -1.0f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  -1.0f,  -1.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  -1.0f,  -1.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  -1.0f,  1.0f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  -1.0f, -1.0f,  -1.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, -1.0f,  -1.0f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, -1.0f,  1.0f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, -1.0f,  1.0f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  -1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  -1.0f, -1.0f,  -1.0f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  -1.0f,  1.0f,  -1.0f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  -1.0f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  -1.0f,  1.0f,  1.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  -1.0f,  1.0f,  -1.0f,  0.0f, 1.0f
+    };
+    
     private Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
     private Vector3 _cubePosition;
 
@@ -228,6 +322,10 @@ public class Window : GameWindow
     private ObjectFrame _objectFrame;
     private ObjectNormal _objectNormal;
     private Lamp _lamp;
+    
+    private Object _objectSmoothed;
+    private ObjectTexture _objectTextureSmoothed;
+    private ObjectNormal _objectNormalSmoothed;
     
     private IObject _currentObject;
 
@@ -301,10 +399,13 @@ public class Window : GameWindow
         
         GL.Enable(EnableCap.DepthTest);
 
-        _object = new Object(_vertices, _cubePosition, _scale);
-        _objectTexture = new ObjectTexture(_verticesTexture, _cubePosition, _scale);
+        //_object = new Object(_vertices, _cubePosition, _scale);
+        _object = new Object(_verticesSmoothed, _cubePosition, _scale);
+        //_objectTexture = new ObjectTexture(_verticesTexture, _cubePosition, _scale);
+        _objectTexture = new ObjectTexture(_verticesTextureSmoothed, _cubePosition, _scale);
         _objectFrame = new ObjectFrame(_verticesFrame, _cubePosition, _scale);
-        _objectNormal = new ObjectNormal(_normals, _cubePosition, _scale);
+        //_objectNormal = new ObjectNormal(_normals, _cubePosition, _scale);
+        _objectNormal = new ObjectNormal(_normalsSmoothed, _cubePosition, _scale);
         _lamp = new Lamp(_lightPos, _vertices);
 
         _currentObject = _object;
