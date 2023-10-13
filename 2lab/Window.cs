@@ -328,11 +328,9 @@ public class Window : GameWindow
     private ObjectNormal _objectNormalSmoothed;
     
     private IObject _currentObject;
+    private IObject _currentObjectSmoothed;
 
     private Camera _camera;
-
-    private bool _firstMove = true;
-    private bool _renderNormals = false;
 
     private Vector2 _lastPos;
 
@@ -340,6 +338,10 @@ public class Window : GameWindow
     private ImGuiController _controller;
 
     private bool _canMove;
+    private bool _smoothedNormals;
+    private bool _firstMove = true;
+    private bool _renderNormals;
+    private bool _spotLightSource = true;
     
     private enum AppMode
     {
@@ -347,8 +349,8 @@ public class Window : GameWindow
         CursorMode
     }
 
-    public int CurrentAppMode = (int) AppMode.CursorMode;
-    
+    public int CurrentAppMode = (int)AppMode.CursorMode;
+
     public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         : base(gameWindowSettings, nativeWindowSettings)
     {
@@ -370,7 +372,6 @@ public class Window : GameWindow
 
             _cubePosition += (Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
             _cubePosition /= 2;
-            
             
             data = sr.ReadLine()!.Split(" ").ToArray();
 
@@ -399,16 +400,21 @@ public class Window : GameWindow
         
         GL.Enable(EnableCap.DepthTest);
 
-        //_object = new Object(_vertices, _cubePosition, _scale);
-        _object = new Object(_verticesSmoothed, _cubePosition, _scale);
-        //_objectTexture = new ObjectTexture(_verticesTexture, _cubePosition, _scale);
-        _objectTexture = new ObjectTexture(_verticesTextureSmoothed, _cubePosition, _scale);
+        _object = new Object(_vertices, _cubePosition, _scale);
+        _objectSmoothed = new Object(_verticesSmoothed, _cubePosition, _scale);
+        
+        _objectTexture = new ObjectTexture(_verticesTexture, _cubePosition, _scale);
+        _objectTextureSmoothed = new ObjectTexture(_verticesTextureSmoothed, _cubePosition, _scale);
+        
         _objectFrame = new ObjectFrame(_verticesFrame, _cubePosition, _scale);
-        //_objectNormal = new ObjectNormal(_normals, _cubePosition, _scale);
-        _objectNormal = new ObjectNormal(_normalsSmoothed, _cubePosition, _scale);
+        
+        _objectNormal = new ObjectNormal(_normals, _cubePosition, _scale);
+        _objectNormalSmoothed = new ObjectNormal(_normalsSmoothed, _cubePosition, _scale);
+        
         _lamp = new Lamp(_lightPos, _vertices);
 
         _currentObject = _object;
+        _currentObjectSmoothed = _objectSmoothed;
 
         _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
         _gui = new GUI.GUI(_controller, this);
@@ -421,12 +427,27 @@ public class Window : GameWindow
         base.OnRenderFrame(e);
         
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-        
-        _currentObject.Render(_camera, _lightPos);
-        if (_renderNormals)
+
+        if (_smoothedNormals)
         {
-            _objectNormal.Render(_camera, _lightPos);
+            _currentObjectSmoothed.Render(_camera, _lightPos);
+            
+            if (_renderNormals)
+            {
+                _objectNormalSmoothed.Render(_camera, _lightPos);
+            }
         }
+
+        else
+        {
+            _currentObject.Render(_camera, _lightPos);
+
+            if (_renderNormals)
+            {
+                _objectNormal.Render(_camera, _lightPos);
+            }
+        }
+        
         _lamp.Render(_camera);
         
         _controller.Update(this, (float)e.Time);
@@ -538,16 +559,19 @@ public class Window : GameWindow
     public void ChangeToMaterialModel()
     {
         _currentObject = _object;
+        _currentObjectSmoothed = _objectSmoothed;
     }
 
     public void ChangeToTextureObject()
     {
         _currentObject = _objectTexture;
+        _currentObjectSmoothed = _objectTextureSmoothed;
     }
 
     public void ChangeToFrameObject()
     {
         _currentObject = _objectFrame;
+        _currentObjectSmoothed = _objectFrame;
     }
 
     public void TurnOnFlashlight()
@@ -555,6 +579,7 @@ public class Window : GameWindow
         if (_currentObject != _objectFrame)
         {
             _currentObject.TurnOnFlashlight();
+            _currentObjectSmoothed.TurnOnFlashlight();
         }
     }
     
@@ -563,6 +588,7 @@ public class Window : GameWindow
         if (_currentObject != _objectFrame)
         {
             _currentObject.TurnOffFlashlight();
+            _currentObjectSmoothed.TurnOffFlashlight();
         }
     }
 
@@ -574,5 +600,15 @@ public class Window : GameWindow
     public void TurnOffNormals()
     {
         _renderNormals = false;
+    }
+
+    public void SmoothedNormals()
+    {
+        _smoothedNormals = true;
+    }
+    
+    public void UnSmoothedNormals()
+    {
+        _smoothedNormals = false;
     }
 }

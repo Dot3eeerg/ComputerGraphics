@@ -15,7 +15,10 @@ public class Object : IObject
     private Shader _shader;
     
     private float[] _flashLightValues = {0.0f, 0.0f};
-
+    private Vector3[,] _SpotLightValues =
+    {
+    };
+    
     private Vector3 _position;
     private float _scale;
     
@@ -65,9 +68,11 @@ public class Object : IObject
 
         // Point light
         _shader.SetVector3($"pointLights[0].position", lightPos);
+        
         _shader.SetVector3($"pointLights[0].ambient", new Vector3(0.05f, 0.05f, 0.05f));
         _shader.SetVector3($"pointLights[0].diffuse", new Vector3(0.8f, 0.8f, 0.8f));
         _shader.SetVector3($"pointLights[0].specular", new Vector3(1.0f, 1.0f, 1.0f));
+        
         _shader.SetFloat($"pointLights[0].constant", 1.0f);
         _shader.SetFloat($"pointLights[0].linear", 0.09f);
         _shader.SetFloat($"pointLights[0].quadratic", 0.032f);
@@ -97,6 +102,14 @@ public class Object : IObject
     {
         _flashLightValues[0] = 0.0f;
         _flashLightValues[1] = 0.0f;
+    }
+    
+    public void TurnOnSpotlight()
+    {
+    }
+    
+    public void TurnOffSpotlight()
+    {
     }
 
     public void UpdateBuffers()

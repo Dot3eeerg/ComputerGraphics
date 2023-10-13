@@ -13,8 +13,10 @@ public class GUI
     private readonly string[] _modeName;
 
     private int _selectedModelType;
-    private bool _isClickedFlashlight = false;
-    private bool _isClickedNormals = false;
+    private bool _isClickedFlashlight;
+    private bool _isClickedSpotlight = true;
+    private bool _isClickedNormals;
+    private bool _isClickedNormalsType;
 
     private int _appModes;
     
@@ -83,7 +85,7 @@ public class GUI
         if (_selectedModelType != 2)
         {
             ImGui.SetNextWindowBgAlpha(1.0f);
-            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 120.0f));
+            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 200.0f));
             if (ImGui.Begin("Flashlight", _windowFlags))
             {
                 ImGui.Checkbox("Flashlight on/off", ref _isClickedFlashlight);
@@ -96,6 +98,41 @@ public class GUI
                 {
                     _window.TurnOffFlashlight();
                 }
+            }
+        }
+        
+        if (_selectedModelType != 2)
+        {
+            ImGui.SetNextWindowBgAlpha(1.0f);
+            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 160.0f));
+            if (ImGui.Begin("Spotlight", _windowFlags))
+            {
+                ImGui.Checkbox("Spotlight on/off", ref _isClickedSpotlight);
+                if (_isClickedFlashlight)
+                {
+                    _window.TurnOnFlashlight();
+                }
+
+                else
+                {
+                    _window.TurnOffFlashlight();
+                }
+            }
+        }
+        
+        ImGui.SetNextWindowBgAlpha(1.0f);
+        ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 120.0f));
+        if (ImGui.Begin("Smoothed normals", _windowFlags))
+        {
+            ImGui.Checkbox("Smoothed normals on/off", ref _isClickedNormalsType);
+            if (_isClickedNormalsType)
+            {
+                _window.SmoothedNormals();
+            }
+
+            else
+            {
+                _window.UnSmoothedNormals();
             }
         }
         
