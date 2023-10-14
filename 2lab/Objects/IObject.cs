@@ -4,7 +4,7 @@ namespace _2lab.Objects;
 
 public interface IObject
 {
-    public void Render(Camera camera, Vector3 lightPos)
+    public void Render(Camera camera, Vector3 lightPos, Vector3 position, float angle)
     {
         
     }

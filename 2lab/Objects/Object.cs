@@ -51,13 +51,14 @@ public class Object : IObject
         _vao.EnableArray(normalLocation, 3 * sizeof(float));
     }
     
-    public void Render(Camera camera, Vector3 lightPos)
+    public void Render(Camera camera, Vector3 lightPos, Vector3 position, float angle)
     {
         _vao.Bind();
         
         _shader.Use();
         
-        Matrix4 model = Matrix4.CreateScale(_scale) * Matrix4.CreateTranslation(_position);
+        Matrix4 model = Matrix4.CreateTranslation(position);
+        model *= Matrix4.CreateFromAxisAngle(new Vector3(1.0f, 0.3f, 0.5f), angle);
         _shader.SetMatrix4("model", model);
         _shader.SetMatrix4("view", camera.GetViewMatrix());
         _shader.SetMatrix4("projection", camera.GetProjectionMatrix());

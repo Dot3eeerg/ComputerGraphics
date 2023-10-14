@@ -74,7 +74,7 @@ public class ObjectTexture : IObject
         //_diffuseMap = Texture.LoadFromFile("Resources/bobik_chu.jpg");
     }
     
-    public void Render(Camera camera, Vector3 lightPos)
+    public void Render(Camera camera, Vector3 lightPos, Vector3 position, float angle)
     {
         _vao.Bind();
         
@@ -82,7 +82,8 @@ public class ObjectTexture : IObject
         _specularMap.Use(TextureUnit.Texture1);
         _shader.Use();
         
-        Matrix4 model = Matrix4.CreateScale(_scale) * Matrix4.CreateTranslation(_position);
+        Matrix4 model = Matrix4.CreateTranslation(position);
+        model *= Matrix4.CreateFromAxisAngle(new Vector3(1.0f, 0.3f, 0.5f), angle);
         _shader.SetMatrix4("model", model);
         _shader.SetMatrix4("view", camera.GetViewMatrix());
         _shader.SetMatrix4("projection", camera.GetProjectionMatrix());

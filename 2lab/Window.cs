@@ -213,7 +213,6 @@ public class Window : GameWindow
          0.5f,  0.5f, 0.5f, 1.0f,  1.0f, 1.0f,
     };
     
-    
     private readonly float[] _verticesSmoothed =
     {
          // Position          Normal
@@ -312,10 +311,22 @@ public class Window : GameWindow
         -0.5f,  0.5f, -0.5f,  -1.0f,  1.0f,  -1.0f,  0.0f, 1.0f
     };
     
-    private Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
-    private Vector3 _cubePosition = new Vector3(0.0f, 0.0f, 0.0f);
+    private readonly Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
+    private readonly Vector3[] _cubePositions =
+    {
+        new Vector3(0.0f, 0.0f, 0.0f),
+        new Vector3(2.0f, 5.0f, -15.0f),
+        new Vector3(-1.5f, -2.2f, -2.5f),
+        new Vector3(-3.8f, -2.0f, -12.3f),
+        new Vector3(2.4f, -0.4f, -3.5f),
+        new Vector3(-1.7f, 3.0f, -7.5f),
+        new Vector3(1.3f, -2.0f, -2.5f),
+        new Vector3(1.5f, 2.0f, -2.5f),
+        new Vector3(1.5f, 0.2f, -1.5f),
+        new Vector3(-1.3f, 1.0f, -1.5f)
+    };
 
-    private float _scale = 1.0f;
+    private readonly float _scale = 1.0f;
     
     private Object _object;
     private ObjectTexture _objectTexture;
@@ -341,7 +352,6 @@ public class Window : GameWindow
     private bool _smoothedNormals;
     private bool _firstMove = true;
     private bool _renderNormals;
-    private bool _spotLightSource = true;
     private bool _renderLamp = true;
     
     private enum AppMode
@@ -365,16 +375,16 @@ public class Window : GameWindow
         
         GL.Enable(EnableCap.DepthTest);
 
-        _object = new Object(_vertices, _cubePosition, _scale);
-        _objectSmoothed = new Object(_verticesSmoothed, _cubePosition, _scale);
+        _object = new Object(_vertices, _cubePositions[0], _scale);
+        _objectSmoothed = new Object(_verticesSmoothed, _cubePositions[0], _scale);
         
-        _objectTexture = new ObjectTexture(_verticesTexture, _cubePosition, _scale);
-        _objectTextureSmoothed = new ObjectTexture(_verticesTextureSmoothed, _cubePosition, _scale);
+        _objectTexture = new ObjectTexture(_verticesTexture, _cubePositions[0], _scale);
+        _objectTextureSmoothed = new ObjectTexture(_verticesTextureSmoothed, _cubePositions[0], _scale);
         
-        _objectFrame = new ObjectFrame(_verticesFrame, _cubePosition, _scale);
+        _objectFrame = new ObjectFrame(_verticesFrame, _cubePositions[0], _scale);
         
-        _objectNormal = new ObjectNormal(_normals, _cubePosition, _scale);
-        _objectNormalSmoothed = new ObjectNormal(_normalsSmoothed, _cubePosition, _scale);
+        _objectNormal = new ObjectNormal(_normals, _cubePositions[0], _scale);
+        _objectNormalSmoothed = new ObjectNormal(_normalsSmoothed, _cubePositions[0], _scale);
         
         _lamp = new Lamp(_lightPos, _vertices);
 
@@ -392,26 +402,31 @@ public class Window : GameWindow
         base.OnRenderFrame(e);
         
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-        if (_smoothedNormals)
+        for (int i = 0; i < _cubePositions.Length; i++)
         {
-            _currentObjectSmoothed.Render(_camera, _lightPos);
+            float angle = 20.0f * i;
             
-            if (_renderNormals)
+            if (_smoothedNormals)
             {
-                _objectNormalSmoothed.Render(_camera, _lightPos);
+                _currentObjectSmoothed.Render(_camera, _lightPos, _cubePositions[i], angle);
+                
+                if (_renderNormals)
+                {
+                    _objectNormalSmoothed.Render(_camera, _lightPos, _cubePositions[i], angle);
+                }
+            }
+
+            else
+            {
+                _currentObject.Render(_camera, _lightPos, _cubePositions[i], angle);
+
+                if (_renderNormals)
+                {
+                    _objectNormal.Render(_camera, _lightPos, _cubePositions[i], angle);
+                }
             }
         }
 
-        else
-        {
-            _currentObject.Render(_camera, _lightPos);
-
-            if (_renderNormals)
-            {
-                _objectNormal.Render(_camera, _lightPos);
-            }
-        }
 
         if (_renderLamp)
         { 
