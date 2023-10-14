@@ -46,12 +46,6 @@
       <None Update="Shaders\frameShader.frag">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Input\Section">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Input\Replication">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Shaders\normalShader.vert">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

@@ -313,9 +313,9 @@ public class Window : GameWindow
     };
     
     private Vector3 _lightPos = new Vector3(1.2f, 1.0f, 2.0f);
-    private Vector3 _cubePosition;
+    private Vector3 _cubePosition = new Vector3(0.0f, 0.0f, 0.0f);
 
-    private float _scale;
+    private float _scale = 1.0f;
     
     private Object _object;
     private ObjectTexture _objectTexture;
@@ -342,6 +342,7 @@ public class Window : GameWindow
     private bool _firstMove = true;
     private bool _renderNormals;
     private bool _spotLightSource = true;
+    private bool _renderLamp = true;
     
     private enum AppMode
     {
@@ -360,42 +361,6 @@ public class Window : GameWindow
     {
         base.OnLoad();
 
-        using (var sr = new StreamReader("Input/Section"))
-        {
-            string[] data;
-
-            data = sr.ReadLine()!.Split(" ").ToArray();
-
-            _cubePosition = new Vector3(Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
-            
-            data = sr.ReadLine()!.Split(" ").ToArray();
-
-            _cubePosition += (Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
-            _cubePosition /= 2;
-            
-            data = sr.ReadLine()!.Split(" ").ToArray();
-
-            Vector3 kek2 = new Vector3(Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
-            
-            data = sr.ReadLine()!.Split(" ").ToArray();
-
-            kek2 += (Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
-            kek2 /= 2;
-
-            _cubePosition += kek2;
-            _cubePosition /= 2;
-        }
-
-        using (var sr = new StreamReader("Input/Replication"))
-        {
-            string[] data;
-
-            _scale = Convert.ToSingle(sr.ReadLine());
-
-            data = sr.ReadLine()!.Split(" ").ToArray();
-            _cubePosition += (Convert.ToSingle(data[0]), Convert.ToSingle(data[1]), Convert.ToSingle(data[2]));
-        }
-        
         GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         
         GL.Enable(EnableCap.DepthTest);
@@ -447,8 +412,11 @@ public class Window : GameWindow
                 _objectNormal.Render(_camera, _lightPos);
             }
         }
-        
-        _lamp.Render(_camera);
+
+        if (_renderLamp)
+        { 
+            _lamp.Render(_camera);
+        }
         
         _controller.Update(this, (float)e.Time);
         _gui.Draw();
@@ -589,6 +557,44 @@ public class Window : GameWindow
         {
             _currentObject.TurnOffFlashlight();
             _currentObjectSmoothed.TurnOffFlashlight();
+        }
+    }
+    
+    public void TurnOnPointLight()
+    {
+        if (_currentObject != _objectFrame)
+        {
+            _currentObject.TurnOnPointlight();
+            _currentObjectSmoothed.TurnOnPointlight();
+            _renderLamp = true;
+        }
+    }
+
+    public void TurnOffPointLight()
+    {
+        if (_currentObject != _objectFrame)
+        {
+            _currentObject.TurnOffPointlight();
+            _currentObjectSmoothed.TurnOffPointlight();
+            _renderLamp = false;
+        }
+    }
+    
+    public void TurnOnDirLight()
+    {
+        if (_currentObject != _objectFrame)
+        {
+            _currentObject.TurnOnDirlight();
+            _currentObjectSmoothed.TurnOnDirlight();
+        }
+    }
+
+    public void TurnOffDirLight()
+    {
+        if (_currentObject != _objectFrame)
+        {
+            _currentObject.TurnOffDirlight();
+            _currentObjectSmoothed.TurnOffDirlight();
         }
     }
 

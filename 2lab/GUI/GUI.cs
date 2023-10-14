@@ -14,7 +14,8 @@ public class GUI
 
     private int _selectedModelType;
     private bool _isClickedFlashlight;
-    private bool _isClickedSpotlight = true;
+    private bool _isClickedPointlight = true;
+    private bool _isClickedDirectionallight = true;
     private bool _isClickedNormals;
     private bool _isClickedNormalsType;
 
@@ -85,7 +86,7 @@ public class GUI
         if (_selectedModelType != 2)
         {
             ImGui.SetNextWindowBgAlpha(1.0f);
-            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 200.0f));
+            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 240.0f));
             if (ImGui.Begin("Flashlight", _windowFlags))
             {
                 ImGui.Checkbox("Flashlight on/off", ref _isClickedFlashlight);
@@ -104,18 +105,37 @@ public class GUI
         if (_selectedModelType != 2)
         {
             ImGui.SetNextWindowBgAlpha(1.0f);
-            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 160.0f));
-            if (ImGui.Begin("Spotlight", _windowFlags))
+            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 200.0f));
+            if (ImGui.Begin("Pointlight", _windowFlags))
             {
-                ImGui.Checkbox("Spotlight on/off", ref _isClickedSpotlight);
-                if (_isClickedFlashlight)
+                ImGui.Checkbox("Pointlight on/off", ref _isClickedPointlight);
+                if (_isClickedPointlight)
                 {
-                    _window.TurnOnFlashlight();
+                    _window.TurnOnPointLight();
                 }
 
                 else
                 {
-                    _window.TurnOffFlashlight();
+                    _window.TurnOffPointLight();
+                }
+            }
+        }
+        
+        if (_selectedModelType != 2)
+        {
+            ImGui.SetNextWindowBgAlpha(1.0f);
+            ImGui.SetNextWindowPos(new System.Numerics.Vector2(1700.0f, 160.0f));
+            if (ImGui.Begin("Directional light", _windowFlags))
+            {
+                ImGui.Checkbox("Directional light on/off", ref _isClickedDirectionallight);
+                if (_isClickedDirectionallight)
+                {
+                    _window.TurnOnDirLight();
+                }
+
+                else
+                {
+                    _window.TurnOffDirLight();
                 }
             }
         }

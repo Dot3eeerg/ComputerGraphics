@@ -15,8 +15,17 @@ public class Object : IObject
     private Shader _shader;
     
     private float[] _flashLightValues = {0.0f, 0.0f};
-    private Vector3[,] _SpotLightValues =
+    private Vector3[] _pointLightValues =
     {
+        new(0.05f, 0.05f, 0.05f),
+        new(0.8f, 0.8f, 0.8f),
+        new(1.0f, 1.0f, 1.0f)
+    };
+    private Vector3[] _dirLightValues =
+    {
+        new(0.05f, 0.05f, 0.05f),
+        new(0.4f, 0.4f, 0.4f),
+        new(0.5f, 0.5f, 0.5f)
     };
     
     private Vector3 _position;
@@ -62,17 +71,15 @@ public class Object : IObject
         
         // Directional light
         _shader.SetVector3("dirLight.direction", new Vector3(-0.2f, -1.0f, -0.3f));
-        _shader.SetVector3("dirLight.ambient", new Vector3(0.05f, 0.05f, 0.05f));
-        _shader.SetVector3("dirLight.diffuse", new Vector3(0.4f, 0.4f, 0.4f));
-        _shader.SetVector3("dirLight.specular", new Vector3(0.5f, 0.5f, 0.5f));
+        _shader.SetVector3("dirLight.ambient", _dirLightValues[0]);
+        _shader.SetVector3("dirLight.diffuse", _dirLightValues[1]);
+        _shader.SetVector3("dirLight.specular", _dirLightValues[2]);
 
         // Point light
         _shader.SetVector3($"pointLights[0].position", lightPos);
-        
-        _shader.SetVector3($"pointLights[0].ambient", new Vector3(0.05f, 0.05f, 0.05f));
-        _shader.SetVector3($"pointLights[0].diffuse", new Vector3(0.8f, 0.8f, 0.8f));
-        _shader.SetVector3($"pointLights[0].specular", new Vector3(1.0f, 1.0f, 1.0f));
-        
+        _shader.SetVector3($"pointLights[0].ambient", _pointLightValues[0]);
+        _shader.SetVector3($"pointLights[0].diffuse", _pointLightValues[1]);
+        _shader.SetVector3($"pointLights[0].specular", _pointLightValues[2]);
         _shader.SetFloat($"pointLights[0].constant", 1.0f);
         _shader.SetFloat($"pointLights[0].linear", 0.09f);
         _shader.SetFloat($"pointLights[0].quadratic", 0.032f);
@@ -104,14 +111,34 @@ public class Object : IObject
         _flashLightValues[1] = 0.0f;
     }
     
-    public void TurnOnSpotlight()
+    public void TurnOnPointlight()
     {
+        _pointLightValues[0] = new Vector3(0.05f, 0.05f, 0.05f);
+        _pointLightValues[1] = new Vector3(0.8f, 0.8f, 0.8f);
+        _pointLightValues[2] = new Vector3(1.0f, 1.0f, 1.0f);
     }
     
-    public void TurnOffSpotlight()
+    public void TurnOffPointlight()
     {
+        _pointLightValues[0] = new Vector3(0.0f, 0.0f, 0.0f);
+        _pointLightValues[1] = new Vector3(0.0f, 0.0f, 0.0f);
+        _pointLightValues[2] = new Vector3(0.0f, 0.0f, 0.0f);
     }
-
+    
+    public void TurnOnDirlight()
+    {
+        _dirLightValues[0] = new Vector3(0.05f, 0.05f, 0.05f);
+        _dirLightValues[1] = new Vector3(0.4f, 0.4f, 0.4f);
+        _dirLightValues[2] = new Vector3(0.5f, 0.5f, 0.5f);
+    }
+    
+    public void TurnOffDirlight()
+    {
+        _dirLightValues[0] = new Vector3(0.0f, 0.0f, 0.0f);
+        _dirLightValues[1] = new Vector3(0.0f, 0.0f, 0.0f);
+        _dirLightValues[2] = new Vector3(0.0f, 0.0f, 0.0f);
+    }
+    
     public void UpdateBuffers()
     {
         _vbo.Update(_vertices);

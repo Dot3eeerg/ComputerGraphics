@@ -18,4 +18,24 @@ public interface IObject
     {
         
     }
+    
+    public void TurnOnPointlight()
+    {
+        
+    }
+    
+    public void TurnOffPointlight()
+    {
+        
+    }
+    
+    public void TurnOnDirlight()
+    {
+        
+    }
+    
+    public void TurnOffDirlight()
+    {
+        
+    }
 }
